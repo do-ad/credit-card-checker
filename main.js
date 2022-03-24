@@ -50,9 +50,9 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 // }
 
 const validateCred = arr => {
-    const last = arr.pop();
-    let rsvd = arr.reverse();
-    //console.log(rsvd);
+    let rsvd = arr.slice();
+    let last = rsvd.pop();
+    rsvd = rsvd.reverse();
     rsvd = rsvd.map((num, index) => {
         //console.log(num + " " + index);
         if (index % 2 === 0) {
@@ -60,16 +60,26 @@ const validateCred = arr => {
         } else return num;
     })
     //console.log(rsvd);
-    console.log ((rsvd.reduce((first, next) => first + next) + last) % 10 === 0 ? true : false);
+    return ((rsvd.reduce((first, next) => first + next) + last) % 10 === 0 ? true : false);
+}
+//console.log(validateCred(valid1));
+
+//const findInvalidCards = cards => cards.filter(validateCred);
+const findInvalidCards = cards => {
+    const valids = cards.filter(validateCred);
+    const invalids = cards.slice();
+    for (let j = 0; j < invalids.length; j++) {
+        for (let i = 0; i < valids.length; i++) {
+            if (JSON.stringify(valids[i]) === JSON.stringify(invalids[j])) {
+                invalids.splice(j, 1);
+            }
+        }
+    }
+    //console.log(valids);
+    //console.log(invalids);
 }
 
-const findInvalidCards = arr => {
-    return arr.filter(car);
-}
-
-validateCred(valid1);
-
-
+findInvalidCards(batch);
 
 
 
